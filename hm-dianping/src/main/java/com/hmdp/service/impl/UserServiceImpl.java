@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import java.util.concurrent.TimeUnit;
+
+import static com.hmdp.utils.RedisConstants.LOGIN_CODE_KEY;
+import static com.hmdp.utils.RedisConstants.LOGIN_CODE_TTL;
 import static com.hmdp.utils.SystemConstants.USER_NICK_NAME_PREFIX;
 
 /**
@@ -45,8 +49,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         //3. 符合，生成验证码
         String code = RandomUtil.randomNumbers(6);
-        //4. 保存验证码到session
-        session.setAttribute("code",code);
+        //4. 保存验证码到redis
+        stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + phone,code,LOGIN_CODE_TTL, TimeUnit.MINUTES);
         //5. 发送验证码
         log.debug("发送短信验证码成功，验证码:{}",code);
         //返回ok
