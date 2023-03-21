@@ -49,7 +49,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             //2.如果不符合，返回错误信息
             return Result.fail("手机号格式错误");
         }
-
         //3. 符合，生成验证码
         String code = RandomUtil.randomNumbers(6);
         //4. 保存验证码到redis
@@ -102,8 +101,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 8. 返回token
         return Result.ok(token);
     }
-
-
 
     private User createUserWithPhone(String phone) {
         // 1.创建用户
