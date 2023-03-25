@@ -46,10 +46,10 @@ public class BlogController {
 
     @PutMapping("/like/{id}")
     public Result likeBlog(@PathVariable("id") Long id) {
-        // 修改点赞数量
-        blogService.update()
-                .setSql("liked = liked + 1").eq("id", id).update();
-        return Result.ok();
+        if (id <= 0) {
+            return Result.fail("id error");
+        }
+        return blogService.likeBlog(id);
     }
 
     @GetMapping("/of/me")
@@ -78,5 +78,13 @@ public class BlogController {
             return Result.fail("id error");
         }
         return blogService.queryBlogById(id);
+    }
+
+    @GetMapping("/likes/{id}")
+    public Result queryLikesById(@PathVariable("id") Long id) {
+        if (id <= 0) {
+            return Result.fail("id error");
+        }
+        return blogService.queryLikesById(id);
     }
 }

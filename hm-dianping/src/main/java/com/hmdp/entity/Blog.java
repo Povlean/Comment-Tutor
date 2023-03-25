@@ -46,6 +46,11 @@ public class Blog implements Serializable {
     @TableField(exist = false)
     private String icon;
     /**
+     * 点赞标识
+     */
+    @TableField(exist = false)
+    private Boolean isLike;
+    /**
      * 用户姓名
      */
     @TableField(exist = false)
