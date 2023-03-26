@@ -97,5 +97,4 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
         return Result.ok(users);
     }
 
-
 }
