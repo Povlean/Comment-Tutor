@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.hmdp</groupId>
-    <artifactId>hm-dianping</artifactId>
+    <artifactId>comment</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>hm-dianping</name>
+    <name>comment</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>

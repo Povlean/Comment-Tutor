@@ -2,6 +2,7 @@ package com.hmdp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.BooleanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hmdp.dto.Result;
@@ -103,14 +104,14 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
             boolean isSuccess = this.update().setSql("liked = liked + 1").eq("id", id).update();
             if (isSuccess) {
                 // 数据库更新成功，更新redis缓存
-                stringRedisTemplate.opsForSet().add(key,userId.toString());
+                stringRedisTemplate.opsForZSet().add(key,userId.toString(),System.currentTimeMillis());
             }
         } else {
             // 4.如果已经点过赞了，那么就取消点赞
             boolean isSuccess = this.update().setSql("liked = liked - 1").eq("id", id).update();
             if (isSuccess) {
                 // 数据库更新成功，更新redis缓存
-                stringRedisTemplate.opsForSet().remove(key,userId.toString());
+                stringRedisTemplate.opsForZSet().remove(key,userId.toString());
             }
         }
         return Result.ok();
@@ -126,12 +127,14 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
         }
         // 2.解析出其中的用户id
         List<Long> ids = top5.stream().map(Long::valueOf).collect(Collectors.toList());
+        String idStr = StrUtil.join(",", ids);
         // 3.根据用户id查询用户
-        List<UserDTO> userDtos = userService.listByIds(ids)
+        List<UserDTO> userDTOS = userService.query()
+                .in("id", ids).last("ORDER BY FIELD(id," + idStr + ")").list()
                 .stream()
                 .map(user -> BeanUtil.copyProperties(user, UserDTO.class))
                 .collect(Collectors.toList());
         // 4.返回
-        return Result.ok(userDtos);
+        return Result.ok(userDTOS);
     }
 }
