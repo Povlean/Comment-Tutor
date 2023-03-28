@@ -95,4 +95,9 @@ public class UserController {
         // 返回脱敏数据
         return Result.ok(userDTO);
     }
+
+    @PostMapping("/sign")
+    public Result sign() {
+        return userService.sign();
+    }
 }
