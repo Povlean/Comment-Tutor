@@ -1,23 +1,19 @@
 package com.hmdp;
 
 
-import com.hmdp.service.impl.ShopServiceImpl;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.annotation.Resource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest
-class HmDianPingApplicationTests {
-
-    @Resource
-    private ShopServiceImpl shopService;
-
+@RunWith(SpringRunner.class)
+public class HmDianPingApplicationTests {
     @Test
-    void test01() {
-        shopService.saveShop2Redis(1L,30L);
+    public void test() {
+        for(int i = 0;i < 100;i++) {
+            System.out.println(i);
+        }
     }
 
 }
